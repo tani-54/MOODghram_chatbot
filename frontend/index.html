@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>MoodGram</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoodGram 🎭</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>MoodGram</h1>
-    <div id="chatbox">
-      <p><strong>Bot:</strong> How are you feeling today?</p>
-    </div>
-    <input type="text" id="userInput" placeholder="Type your mood here..." />
-    <button onclick="sendMood()">Send</button>
-    <div id="reelContainer"></div>
+    <h1>MoodGram 🎭</h1>
+    <input type="text" id="moodInput" placeholder="Enter your mood (e.g., romantic)" />
+    <button onclick="fetchReels()">Get Reels</button>
+    <div id="output"></div>
   </div>
   <script src="script.js"></script>
 </body>

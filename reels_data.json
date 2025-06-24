@@ -1,0 +1,17 @@
+{
+  "YOUTUBE_API_KEY": "AIzaSyA-VO4EpcpBZ21uItXaL_nolYvXE8VZ4e4",
+  "reels": {
+    "happy": [
+      {
+        "title": "Smile and Shine 🌞",
+        "video_url": "https://www.youtube.com/embed/abc123"
+      }
+    ],
+    "sad": [
+      {
+        "title": "It gets better 💪",
+        "video_url": "https://www.youtube.com/embed/xyz456"
+      }
+    ]
+  }
+}
