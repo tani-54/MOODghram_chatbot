@@ -7,7 +7,7 @@ from youtube_fetcher import fetch_youtube_shorts
 from mood_logic import detect_mood, generate_reply_with_llm  # ✅ Uses LLM-based mood detection logic
 
 # ----------------------------
-# Load .env file for LLM key
+# Load .env file for LLM key agoubfp;ig
 # ----------------------------
 load_dotenv()
 
