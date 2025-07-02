@@ -4,7 +4,7 @@ import requests
 import datetime
 import random
 
-def fetch_youtube_shorts(query, max_results=5):
+def fetch_youtube_shorts(query, max_results=8):
     config_path = os.path.join(os.path.dirname(__file__), "..", "reels_data.json")
     if not os.path.exists(config_path):
         raise FileNotFoundError("reels_data.json not found!")
@@ -19,6 +19,7 @@ def fetch_youtube_shorts(query, max_results=5):
     # Add freshness and variety
     days_back = random.randint(0, 14)
     published_after = (datetime.datetime.utcnow() - datetime.timedelta(days=days_back)).isoformat("T") + "Z"
+
 
     # Mood-specific query improvement
     mood_queries = {

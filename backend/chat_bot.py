@@ -4,7 +4,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from youtube_fetcher import fetch_youtube_shorts
-from mood_logic import detect_mood  # ✅ Uses LLM-based mood detection logic
+from mood_logic import detect_mood, generate_reply_with_llm  # ✅ Uses LLM-based mood detection logic
 
 # ----------------------------
 # Load .env file for LLM key
@@ -69,7 +69,8 @@ if user_input and isinstance(user_input, str):
     st.session_state.chat_history.append({"role": "user", "content": user_input})
 
     # Show greeting message only on first user interaction
-    if is_greeting(user_input) and len(st.session_state.chat_history) <= 2:
+    if is_greeting(user_input) and len([msg for msg in st.session_state.chat_history if msg["role"] == "user"]) == 1:
+
         st.session_state.chat_history.append({
             "role": "assistant",
             "content": "Hey there! 😊 How are you feeling today?"
@@ -83,7 +84,19 @@ if user_input and isinstance(user_input, str):
             max_tokens=max_tokens
         )
         print("Detected mood:", detected_mood)
+        
+        # ✅ Generate smart dynamic reply based on user input
+        llm_reply = generate_reply_with_llm(
+        user_input,
+        temperature=temperature,
+        top_p=top_p,
+        max_tokens=max_tokens
+        )
 
+        st.session_state.chat_history.append({
+            "role": "assistant",
+            "content": llm_reply
+        })
         if detected_mood:
             try:
                 reels_list = fetch_youtube_shorts(detected_mood)
@@ -94,7 +107,7 @@ if user_input and isinstance(user_input, str):
             if reels_list:
                 st.session_state.chat_history.append({
                     "role": "assistant",
-                    "content": f"Here are some *{detected_mood}* reels for you (real-time):"
+                    "content": f"Here are some {detected_mood} reels for you (real-time):"
                 })
                 st.session_state.chat_history.append({
                     "role": "assistant",
@@ -104,7 +117,7 @@ if user_input and isinstance(user_input, str):
                 fallback = mood_reels.get(detected_mood, [])
                 st.session_state.chat_history.append({
                     "role": "assistant",
-                    "content": f"(⚠️ Couldn't fetch live data) Here are fallback *{detected_mood}* reels:"
+                    "content": f"(⚠ Couldn't fetch live data) Here are fallback {detected_mood} reels:"
                 })
                 st.session_state.chat_history.append({
                     "role": "assistant",
@@ -126,6 +139,6 @@ for msg in st.session_state.chat_history:
     elif isinstance(msg["content"], list):
         with st.chat_message("assistant"):
             for reel in msg["content"]:
-                st.markdown(f"**{reel['title']}**")
+                st.markdown(f"{reel['title']}")
                 st.video(reel["video_url"])
                 st.markdown("---")
