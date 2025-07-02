@@ -8,7 +8,7 @@ def map_mood_to_keywords(user_input):
     user_input = user_input.lower()
     mood_keywords = {
     "happy": [
-        "happy", "joy", "glad", "excited", "cheerful", "funny", "delighted", "content", "blissful", "grateful",
+        "happy", "joy", "good", "glad", "excited", "cheerful", "funny", "delighted", "content", "blissful", "grateful",
         "positive", "ecstatic", "elated", "giggly", "laugh", "reels", "videos", "watch", "smiling"
     ],
     "sad": [
