@@ -4,7 +4,25 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from youtube_fetcher import fetch_youtube_shorts
-from mood_logic import detect_mood, generate_reply_with_llm  # ✅ Uses LLM-based mood detection logic
+from mood_logic import detect_mood, generate_reply_with_llm 
+ # ✅ Uses LLM-based mood detection logic
+st.set_page_config(page_title="MoodGram Reels Bot 🎬", layout="wide")
+
+st.markdown("""
+    <h1 style="
+        background: linear-gradient(90deg, #ff6a00, #ee0979);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 1rem;
+        text-align: center;
+        font-size: 2.2rem;
+        margin-top: 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    ">
+        🎥 MoodGram - Reels Recommendation Bot
+    </h1>
+""", unsafe_allow_html=True)
+
 
 # ----------------------------
 # Load .env file for LLM key
@@ -35,11 +53,11 @@ def is_greeting(text):
 # ----------------------------
 # Streamlit UI Setup
 # ----------------------------
-st.set_page_config(page_title="MoodGram Reels Bot", page_icon="🎥", layout="wide")
-st.title("🎥 MoodGram - Reels Recommendation Bot")
+st.set_page_config(page_title="MoodGram Reels", page_icon="🎥", layout="wide")
+#Has a chat history already been created for this session?"If not, it creates an empty list to start storing messages
+if "chat_history" not in st.session_state:  ##temporary storage that holds data across user interactions.
 
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+    st.session_state.chat_history = []   #This line ensures your chatbot can remember and display full conversations — just like WhatsApp or ChatGPT!
 
 # ----------------------------
 # Sidebar for Controls
@@ -63,7 +81,7 @@ mood_reels = load_reels_data()
 # ----------------------------
 # Chat Input Section
 # ----------------------------
-user_input = st.chat_input("How are you today? Type your mood or just say hi...")
+user_input = st.chat_input("How are you today? Type your mood or just say hi...")  ##chat box line
 
 if user_input and isinstance(user_input, str):
     st.session_state.chat_history.append({"role": "user", "content": user_input})
@@ -130,15 +148,22 @@ if user_input and isinstance(user_input, str):
             })
 
 # ----------------------------
-# Display Chat Messages
+# Display Chat Messages (Enhanced UI)
 # ----------------------------
 for msg in st.session_state.chat_history:
-    if isinstance(msg["content"], str):
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
-    elif isinstance(msg["content"], list):
-        with st.chat_message("assistant"):
-            for reel in msg["content"]:
-                st.markdown(f"{reel['title']}")
-                st.video(reel["video_url"])
-                st.markdown("---")
+    with st.chat_message(msg["role"]):
+        if isinstance(msg["content"], str):
+            st.markdown(f"<div class='chat-message'>{msg['content']}</div>", unsafe_allow_html=True)
+
+        elif isinstance(msg["content"], list):
+            st.markdown("<div class='chat-message'>🎞️ <b>Here are some reels just for you:</b></div>", unsafe_allow_html=True)
+            cols = st.columns(2)
+
+            for i, reel in enumerate(msg["content"]):
+                with cols[i % 2]:
+                    st.markdown(f"<div class='reel-title'>🎬 {reel['title']}</div>", unsafe_allow_html=True)
+                    st.markdown(f"""
+                        <div class="video-box">
+                            <iframe width="100%" height="240" src="{reel['video_url']}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    """, unsafe_allow_html=True)

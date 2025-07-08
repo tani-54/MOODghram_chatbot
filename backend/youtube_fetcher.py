@@ -20,15 +20,21 @@ def fetch_youtube_shorts(query, max_results=8):
     days_back = random.randint(0, 14)
     published_after = (datetime.datetime.utcnow() - datetime.timedelta(days=days_back)).isoformat("T") + "Z"
 
-
-    # Mood-specific query improvement
+    # ✅ Mood-specific query improvement with Anime support
     mood_queries = {
         "happy": "funny trending comedy shorts",
         "sad": "emotional sad breakup shorts",
         "motivated": "motivational speech hustle shorts",
         "relaxed": "chill lofi music relaxing shorts",
-        "angry": "funny rage fails shorts"
+        "angry": "funny rage fails shorts",
+        "anime": "trending anime edits fight amv shorts",  # ✅ Added
+        "bored": "random entertaining shorts",
+        "romantic": "romantic love story shorts",
+        "anxious": "calm soothing stress relief shorts",
+        "confident": "self confidence speech shorts"
     }
+
+    # Fallback if mood isn't found
     query = mood_queries.get(query.lower(), f"{query} shorts")
 
     search_url = "https://www.googleapis.com/youtube/v3/search"
